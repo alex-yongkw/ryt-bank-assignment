@@ -14,8 +14,8 @@ export function OptionalNoteInput() {
         maxLength={200}
         showCharCounter
         showClearButton
-        onClear={() => Store.transfer.resetNote()}
-        onChangeText={(text) => Store.transfer.setNote(text)}
+        onClear={() => Store.transfer.note.value.reset()}
+        onChangeText={(text) => Store.transfer.note.value.set(text)}
       />
     </View>
   );
