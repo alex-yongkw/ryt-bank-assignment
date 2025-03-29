@@ -8,6 +8,10 @@ const tintColorDark = "#fff";
 
 export const Colors = {
   brand: "#0000e6",
+  transferType: {
+    in: "#22c55e",
+    out: "#ef4444",
+  },
   light: {
     text: "#11181C",
     background: "#fff",
