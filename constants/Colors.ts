@@ -12,6 +12,9 @@ export const Colors = {
     in: "#22c55e",
     out: "#ef4444",
   },
+  button: {
+    danger: "#ef4444",
+  },
   light: {
     text: "#11181C",
     background: "#fff",
