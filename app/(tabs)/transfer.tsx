@@ -6,6 +6,9 @@ import { Colors } from "@/constants/Colors";
 import { AccountPicker } from "@/components/AccountPicker";
 import { ArrowDownIcon } from "@/components/ui/ArrowDownIcon";
 import { RecipientPicker } from "@/components/RecipientPicker";
+import { AmountInput } from "@/components/AmountInput";
+import { OptionalNoteInput } from "@/components/OptionalNoteInput";
+import { ActionButton } from "@/components/ui/ActionButton";
 
 export default function HomeScreen() {
   return (
@@ -14,6 +17,9 @@ export default function HomeScreen() {
       <AccountPicker />
       <ArrowDownIcon />
       <RecipientPicker />
+      <AmountInput />
+      <OptionalNoteInput />
+      <ActionButton label="Send !" onPress={() => {}} />
     </View>
   );
 }
