@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { FlatList, StyleSheet } from "react-native";
 import { View } from "react-native-ui-lib";
 import { Layout } from "@/constants/Layout";
 import { SectionLabel } from "@/components/ui/SectionLabel";
@@ -94,16 +94,23 @@ export default function HomeScreen() {
   return (
     <View style={styles.viewContainer}>
       <SectionLabel label="Transaction History" />
-      {transactionHistory.map((row) => (
-        <TransactionHistoryCard
-          key={row.id}
-          type={row.type}
-          name={row.name}
-          amount={row.amount}
-          note={row.note}
-          timestamp={row.timestamp}
-        />
-      ))}
+      <FlatList
+        data={transactionHistory}
+        renderItem={({ item }) => (
+          <View style={styles.listItem}>
+            <TransactionHistoryCard
+              key={item.id}
+              type={item.type}
+              name={item.name}
+              amount={item.amount}
+              note={item.note}
+              timestamp={item.timestamp}
+            />
+          </View>
+        )}
+        keyExtractor={(item) => item.id}
+        style={styles.listContainer}
+      />
     </View>
   );
 }
@@ -112,6 +119,12 @@ const styles = StyleSheet.create({
   viewContainer: {
     padding: Layout.content.padding,
     backgroundColor: Colors.light.background,
-    gap: Layout.transactionHistory.gap,
+  },
+  listItem: {
+    marginBottom: Layout.transactionHistory.gap,
+  },
+  listContainer: {
+    marginTop: Layout.transactionHistory.gap,
+    marginBottom: Layout.transactionHistory.gap,
   },
 });
