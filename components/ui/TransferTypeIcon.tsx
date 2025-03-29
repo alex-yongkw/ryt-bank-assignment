@@ -3,9 +3,10 @@ import { View } from "react-native-ui-lib";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useMemo } from "react";
 import { StyleSheet } from "react-native";
+import { TransferType } from "@/types";
 
 type Props = {
-  type: "in" | "out";
+  type: TransferType;
 };
 
 export function TransferTypeIcon({ type }: Props) {
