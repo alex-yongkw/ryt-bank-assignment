@@ -5,5 +5,5 @@ type Props = {
 };
 
 export function SectionLabel({ label }: Props) {
-  return <Text text40>{label}</Text>;
+  return <Text text50>{label}</Text>;
 }
