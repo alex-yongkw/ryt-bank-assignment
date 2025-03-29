@@ -18,4 +18,7 @@ export const Layout = {
   actionButton: {
     borderRadius: 10,
   },
+  transactionHistory: {
+    gap: 16,
+  },
 };
