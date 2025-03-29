@@ -34,11 +34,23 @@ export const Store = {
     resetTransferAmount: () => {
       duix.set("amount", 0, { checkForChangesInTheValue: true });
     },
+    getTransferAmount: () => {
+      duix.get("amount");
+    },
+    subscribeTransferAmount: (callback: SubscribeCallback<number>) => {
+      return duix.subscribe("amount", callback);
+    },
     setNote: (note: string) => {
       duix.set("note", note, { checkForChangesInTheValue: true });
     },
     resetNote: () => {
       duix.set("note", "", { checkForChangesInTheValue: true });
+    },
+    getNote: () => {
+      duix.get("note");
+    },
+    subscribeNote: (callback: SubscribeCallback<string>) => {
+      return duix.subscribe("note", callback);
     },
   },
 };

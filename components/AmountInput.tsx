@@ -1,10 +1,19 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { NumberInput, View } from "react-native-ui-lib";
 import { InputLabel } from "./ui/InputLabel";
 import { StyleSheet } from "react-native";
+import { Store } from "@/store";
 
 export function AmountInput() {
-  const [selectedAmount, setSelectedAmount] = useState<number>(0);
+  const [_selectedAmount, setSelectedAmount] = useState<number>(0);
+
+  useEffect(() => {
+    const unsubscribe = Store.transfer.subscribeTransferAmount((newVal) => {
+      setSelectedAmount(newVal);
+    });
+
+    return unsubscribe;
+  }, []);
 
   return (
     <View>
