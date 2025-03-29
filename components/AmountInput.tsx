@@ -3,13 +3,29 @@ import { NumberInput, View } from "react-native-ui-lib";
 import { InputLabel } from "./ui/InputLabel";
 import { StyleSheet } from "react-native";
 import { Store } from "@/store";
+import { InputError } from "./ui/InputError";
+import { ErrorMsg } from "@/constants/ErrorMsg";
 
 export function AmountInput() {
   const [_selectedAmount, setSelectedAmount] = useState<number>(0);
+  const [inputError, setInputError] = useState<string>("");
 
+  // subscribe to value change
   useEffect(() => {
-    const unsubscribe = Store.transfer.subscribeTransferAmount((newVal) => {
+    // initiate the store value to 0
+    Store.transfer.amount.value.set(0);
+
+    const unsubscribe = Store.transfer.amount.value.subscribe((newVal) => {
       setSelectedAmount(newVal);
+    });
+
+    return unsubscribe;
+  }, []);
+
+  // subscribe to input error change
+  useEffect(() => {
+    const unsubscribe = Store.transfer.amount.error.subscribe((newVal) => {
+      setInputError(newVal);
     });
 
     return unsubscribe;
@@ -25,12 +41,14 @@ export function AmountInput() {
         leadingTextStyle={styles.currency}
         onChangeNumber={(data) => {
           if (data.type === "valid") {
-            setSelectedAmount(data.number);
+            Store.transfer.amount.error.clear();
+            Store.transfer.amount.value.set(data.number);
           } else {
-            // TODO -- handle input error
+            Store.transfer.amount.error.set(ErrorMsg.amount.invalid);
           }
         }}
       />
+      <InputError label={inputError} />
     </View>
   );
 }

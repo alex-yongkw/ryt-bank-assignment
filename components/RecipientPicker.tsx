@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Picker, PickerModes, PickerValue, View } from "react-native-ui-lib";
 import { InputLabel } from "./ui/InputLabel";
 import { Store } from "@/store";
+import { InputError } from "./ui/InputError";
 
 type Recipient = {
   id: string;
@@ -20,10 +21,21 @@ const recipients: Recipient[] = [
 
 export function RecipientPicker() {
   const [selectedRecipient, setSelectedRecipient] = useState<PickerValue>("");
+  const [inputError, setInputError] = useState<string>("");
 
+  // subscribe to value change
   useEffect(() => {
-    const unsubscribe = Store.transfer.subscribeRecipient((newVal) => {
+    const unsubscribe = Store.transfer.recipient.value.subscribe((newVal) => {
       setSelectedRecipient(newVal);
+    });
+
+    return unsubscribe;
+  }, []);
+
+  // subscribe to input error change
+  useEffect(() => {
+    const unsubscribe = Store.transfer.recipient.error.subscribe((newVal) => {
+      setInputError(newVal);
     });
 
     return unsubscribe;
@@ -37,13 +49,15 @@ export function RecipientPicker() {
         value={selectedRecipient as string} // TODO -- Fix type
         placeholder={"Select recipient"}
         onChange={(selectedRecipient) => {
-          Store.transfer.setRecipient(selectedRecipient as string);
+          Store.transfer.recipient.error.clear();
+          Store.transfer.recipient.value.set(selectedRecipient as string);
         }}
       >
         {recipients.map((acc) => (
           <Picker.Item label={acc.name} key={acc.id} value={acc.id} />
         ))}
       </Picker>
+      <InputError label={inputError} />
     </View>
   );
 }
