@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { Alert, StyleSheet } from "react-native";
 import { View } from "react-native-ui-lib";
 import { Layout } from "@/constants/Layout";
 import { SectionLabel } from "@/components/ui/SectionLabel";
@@ -9,13 +9,23 @@ import { RecipientPicker } from "@/components/RecipientPicker";
 import { AmountInput } from "@/components/AmountInput";
 import { OptionalNoteInput } from "@/components/OptionalNoteInput";
 import { ActionButton } from "@/components/ui/ActionButton";
-import { TransactionHistoryCard } from "@/components/TransactionHistoryCard";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { Store } from "@/store";
 import { ErrorMsg } from "@/constants/ErrorMsg";
 import { exist } from "@/utils/check-error";
+import * as LocalAuthentication from "expo-local-authentication";
+import { PinAuthModal } from "@/components/PinAuthModal";
+import { TransferProgressModal } from "@/components/TransferProgressModal";
+import { TransferErrorModal } from "@/components/TransferErrorModal";
+import { TransferSuccessModal } from "@/components/TransferSuccessModal";
 
 export default function TransferScreen() {
+  const [useAppPin, setUseAppPin] = useState(false);
+  const [showTransferProgress, setShowTransferProgress] = useState(false);
+  const [showTransferError, setShowTransferError] = useState(false);
+  const [transferErrorMsg, setTransferErrorMsg] = useState("");
+  const [showTransferSuccess, setShowTransferSuccess] = useState(false);
+
   // validate form and set error msg to inputs if any.
   const validateForm = useCallback(() => {
     const account = Store.transfer.account.value.get();
@@ -44,7 +54,7 @@ export default function TransferScreen() {
   }, []);
 
   // check if there's any input error.
-  const checkFormError = useCallback(() => {
+  const isFormContainError = useCallback(() => {
     const accountError = Store.transfer.account.error.get();
     const recipientError = Store.transfer.recipient.error.get();
     const amountError = Store.transfer.amount.error.get();
@@ -52,13 +62,65 @@ export default function TransferScreen() {
     return exist(accountError) || exist(recipientError) || exist(amountError);
   }, []);
 
-  const initiateFundTransfer = useCallback(() => {
+  // 0 = Indicates no enrolled authentication.
+  // 1 = Indicates non-biometric authentication (e.g. PIN, Pattern).
+  // 2 = Indicates weak biometric authentication. For example, a 2D image-based face unlock.
+  // 3 = Indicates strong biometric authentication. For example, a fingerprint scan or 3D face unlock.
+  const getEnrolledSecurityLevel = useCallback(async () => {
+    return await LocalAuthentication.getEnrolledLevelAsync();
+  }, []);
+
+  const requestFundTransfer = useCallback(async () => {
+    setShowTransferProgress(true);
+
+    // Mock API
+    await new Promise((resolve) => {
+      setTimeout(resolve, 2000);
+    });
+
+    setShowTransferProgress(false);
+
+    // setShowTransferSuccess(true);
+    setShowTransferError(true);
+    setTransferErrorMsg("Unknown error occur, please try again.");
+  }, []);
+
+  const biometricOrFallbackAuth = useCallback(async () => {
+    try {
+      const result = await LocalAuthentication.authenticateAsync({
+        cancelLabel: "Cancel",
+      });
+
+      console.log("** auth result:", result);
+    } catch (err) {
+      // TODO - send error to Log Reporting.
+
+      Alert.alert(
+        "Authentication Error",
+        "Unknown error occur, please try again.",
+        [
+          {
+            text: "Dismiss",
+            style: "cancel",
+          },
+        ]
+      );
+    }
+  }, []);
+
+  const initiateFundTransfer = useCallback(async () => {
     validateForm();
 
-    const isError = checkFormError();
+    if (isFormContainError()) {
+      return;
+    }
 
-    if (!isError) {
-      // Mock transfer API
+    // no security method enrolled, use App pin to authenticate
+    if ((await getEnrolledSecurityLevel()) === 0) {
+      setUseAppPin(true);
+    } else {
+      // Biometric authentication or fallback
+      await biometricOrFallbackAuth();
     }
   }, [validateForm]);
 
@@ -71,19 +133,24 @@ export default function TransferScreen() {
       <AmountInput />
       <OptionalNoteInput />
       <ActionButton label="Send !" onPress={initiateFundTransfer} />
-      <TransactionHistoryCard
-        type="out"
-        name="Sarah"
-        amount={520.9}
-        note="Rent"
-        timestamp="Yesterday, 10:15 AM"
+      <PinAuthModal
+        visible={useAppPin}
+        onCorrectPin={() => {
+          setUseAppPin(false);
+          requestFundTransfer();
+        }}
+        onCancel={() => setUseAppPin(false)}
       />
-      <TransactionHistoryCard
-        type="in"
-        name="Connor"
-        amount={20.4}
-        note="asdwa asd wa sd asd wda sda wadafdgr ga ssad wa "
-        timestamp="Yesterday, 12:15 AM"
+      <TransferProgressModal visible={showTransferProgress} />
+      <TransferErrorModal
+        visible={showTransferError}
+        message={transferErrorMsg}
+        onClose={() => setShowTransferError(false)}
+      />
+      <TransferSuccessModal
+        visible={showTransferSuccess}
+        message="Transfer Success !"
+        onClose={() => setShowTransferSuccess(false)}
       />
     </View>
   );
