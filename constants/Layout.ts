@@ -10,9 +10,12 @@ export const Layout = {
     padding: 18,
   },
   form: {
-    gap: 12,
+    gap: 24,
     input: {
       marginBottom: 4,
     },
+  },
+  actionButton: {
+    borderRadius: 10,
   },
 };
