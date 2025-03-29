@@ -13,8 +13,11 @@ export const Colors = {
     out: "#ef4444",
   },
   button: {
+    success: "#22c55e",
     danger: "#ef4444",
   },
+  success: "#22c55e",
+  error: "#ef4444",
   light: {
     text: "#11181C",
     background: "#fff",
