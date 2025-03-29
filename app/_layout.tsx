@@ -10,7 +10,7 @@ import { Slot } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { View } from "react-native-ui-lib";
 import { Layout } from "@/constants/Layout";
 import { StyleSheet } from "react-native";
@@ -38,12 +38,14 @@ export default function RootLayout() {
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <StatusBar style="auto" />
-      <SafeAreaView style={styles.safeAreaContainer}>
-        <View style={styles.viewContainer}>
-          <AppHeader />
-        </View>
-        <Slot />
-      </SafeAreaView>
+      <SafeAreaProvider>
+        <SafeAreaView style={styles.safeAreaContainer}>
+          <View style={styles.viewContainer}>
+            <AppHeader />
+          </View>
+          <Slot />
+        </SafeAreaView>
+      </SafeAreaProvider>
     </ThemeProvider>
   );
 }
