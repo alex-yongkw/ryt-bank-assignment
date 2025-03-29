@@ -3,7 +3,6 @@ import { View } from "react-native-ui-lib";
 import { Layout } from "@/constants/Layout";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 import { Colors } from "@/constants/Colors";
-import { AccountPicker } from "@/components/AccountPicker";
 import { TransferType } from "@/types";
 import { TransactionHistoryCard } from "@/components/TransactionHistoryCard";
 
