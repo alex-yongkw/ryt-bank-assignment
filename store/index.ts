@@ -4,53 +4,113 @@ type SubscribeCallback<T> = (newValue: T, oldValue: T) => void;
 
 export const Store = {
   transfer: {
-    setAccount: (account: string) => {
-      duix.set("account", account, { checkForChangesInTheValue: true });
+    account: {
+      value: {
+        set: (account: string) => {
+          duix.set("account", account, { checkForChangesInTheValue: true });
+        },
+        reset: () => {
+          duix.set("account", undefined, { checkForChangesInTheValue: true });
+        },
+        get: (): string => {
+          return duix.get("account");
+        },
+        subscribe: (callback: SubscribeCallback<string>) => {
+          return duix.subscribe("account", callback);
+        },
+      },
+      error: {
+        set: (msg: string) => {
+          duix.set("accountErrorMsg", msg, { checkForChangesInTheValue: true });
+        },
+        clear: () => {
+          duix.set("accountErrorMsg", "", { checkForChangesInTheValue: true });
+        },
+        get: (): string => {
+          return duix.get("accountErrorMsg");
+        },
+        subscribe: (callback: SubscribeCallback<string>) => {
+          return duix.subscribe("accountErrorMsg", callback);
+        },
+      },
     },
-    resetAccount: () => {
-      duix.set("account", undefined, { checkForChangesInTheValue: true });
+    recipient: {
+      value: {
+        set: (recipient: string) => {
+          duix.set("recipient", recipient, { checkForChangesInTheValue: true });
+        },
+        reset: () => {
+          duix.set("recipient", undefined, { checkForChangesInTheValue: true });
+        },
+        get: (): string => {
+          return duix.get("recipient");
+        },
+        subscribe: (callback: SubscribeCallback<string>) => {
+          return duix.subscribe("recipient", callback);
+        },
+      },
+      error: {
+        set: (msg: string) => {
+          duix.set("recipientErrorMsg", msg, {
+            checkForChangesInTheValue: true,
+          });
+        },
+        clear: () => {
+          duix.set("recipientErrorMsg", "", {
+            checkForChangesInTheValue: true,
+          });
+        },
+        get: (): string => {
+          return duix.get("recipientErrorMsg");
+        },
+        subscribe: (callback: SubscribeCallback<string>) => {
+          return duix.subscribe("recipientErrorMsg", callback);
+        },
+      },
     },
-    getAccount: (): string => {
-      return duix.get("account");
+    amount: {
+      value: {
+        set: (amount: number) => {
+          duix.set("amount", amount, { checkForChangesInTheValue: true });
+        },
+        get: (): number => {
+          return duix.get("amount");
+        },
+        subscribe: (callback: SubscribeCallback<number>) => {
+          return duix.subscribe("amount", callback);
+        },
+      },
+      error: {
+        set: (msg: string) => {
+          duix.set("amountErrorMsg", msg, {
+            checkForChangesInTheValue: true,
+          });
+        },
+        clear: () => {
+          duix.set("amountErrorMsg", "", {
+            checkForChangesInTheValue: true,
+          });
+        },
+        get: (): string => {
+          return duix.get("amountErrorMsg");
+        },
+        subscribe: (callback: SubscribeCallback<string>) => {
+          return duix.subscribe("amountErrorMsg", callback);
+        },
+      },
     },
-    subscribeAccount: (callback: SubscribeCallback<string>) => {
-      return duix.subscribe("account", callback);
-    },
-    setRecipient: (recipient: string) => {
-      duix.set("recipient", recipient, { checkForChangesInTheValue: true });
-    },
-    resetRecipient: () => {
-      duix.set("recipient", undefined, { checkForChangesInTheValue: true });
-    },
-    getRecipient: () => {
-      duix.get("recipient");
-    },
-    subscribeRecipient: (callback: SubscribeCallback<string>) => {
-      return duix.subscribe("recipient", callback);
-    },
-    setTransferAmount: (amount: number) => {
-      duix.set("amount", amount, { checkForChangesInTheValue: true });
-    },
-    resetTransferAmount: () => {
-      duix.set("amount", 0, { checkForChangesInTheValue: true });
-    },
-    getTransferAmount: () => {
-      duix.get("amount");
-    },
-    subscribeTransferAmount: (callback: SubscribeCallback<number>) => {
-      return duix.subscribe("amount", callback);
-    },
-    setNote: (note: string) => {
-      duix.set("note", note, { checkForChangesInTheValue: true });
-    },
-    resetNote: () => {
-      duix.set("note", "", { checkForChangesInTheValue: true });
-    },
-    getNote: () => {
-      duix.get("note");
-    },
-    subscribeNote: (callback: SubscribeCallback<string>) => {
-      return duix.subscribe("note", callback);
+    note: {
+      value: {
+        set: (note: string) => {
+          duix.set("note", note, { checkForChangesInTheValue: true });
+        },
+        reset: () => {
+          duix.set("note", "", { checkForChangesInTheValue: true });
+        },
+        get: (): string => {
+          return duix.get("note");
+        },
+      },
     },
   },
 };
