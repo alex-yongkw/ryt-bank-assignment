@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Picker, PickerModes, PickerValue, View } from "react-native-ui-lib";
 import { InputLabel } from "./ui/InputLabel";
+import { Store } from "@/store";
 
 type Account = {
   id: string;
@@ -16,14 +17,24 @@ const accounts: Account[] = [
 export function AccountPicker() {
   const [selectedAccount, setSelectedAccount] = useState<PickerValue>("");
 
+  useEffect(() => {
+    const unsubscribe = Store.transfer.subscribeAccount((newVal) => {
+      setSelectedAccount(newVal);
+    });
+
+    return unsubscribe;
+  }, []);
+
   return (
     <View>
       <InputLabel label="From" />
       <Picker
         mode={PickerModes.SINGLE}
-        value={selectedAccount as any} // TODO -- Fix type
+        value={selectedAccount as string} // TODO -- Fix type
         placeholder={"Select account"}
-        onChange={(selectedAcc) => setSelectedAccount(selectedAcc)}
+        onChange={(selectedAcc) => {
+          Store.transfer.setAccount(selectedAcc as string); // TODO -- Fix type
+        }}
       >
         {accounts.map((acc) => (
           <Picker.Item label={acc.name} key={acc.id} value={acc.id} />
