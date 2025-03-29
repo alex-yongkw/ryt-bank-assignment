@@ -1,7 +1,7 @@
 import { Colors } from "@/constants/Colors";
 import { Card } from "react-native-ui-lib";
 
-const DIMENSION = 45;
+const DIMENSION = 40;
 
 export function Avatar() {
   return (
@@ -11,7 +11,7 @@ export function Avatar() {
       style={{ backgroundColor: Colors.brand, marginRight: 10 }}
     >
       <Card.Section
-        content={[{ text: "RB", text50: true, white: true }]}
+        content={[{ text: "RB", text60: true, white: true }]}
         contentStyle={{
           height: DIMENSION,
           alignSelf: "center",

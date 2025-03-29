@@ -7,7 +7,7 @@ export function AppHeader() {
   return (
     <View row centerV>
       <Avatar />
-      <Text text40BL style={{ color: Colors.brand }}>
+      <Text text50BL style={{ color: Colors.brand }}>
         RightBank
       </Text>
     </View>
