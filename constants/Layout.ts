@@ -21,4 +21,7 @@ export const Layout = {
   transactionHistory: {
     gap: 16,
   },
+  input: {
+    text: 18,
+  },
 };

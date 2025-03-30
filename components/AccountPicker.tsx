@@ -6,6 +6,7 @@ import { InputError } from "./ui/InputError";
 import { useColorScheme } from "@/hooks/useColorScheme.web";
 import { StyleSheet } from "react-native";
 import { Colors } from "@/constants/Colors";
+import { Layout } from "@/constants/Layout";
 
 type Account = {
   id: string;
@@ -74,11 +75,11 @@ export function AccountPicker() {
 
 const styles = StyleSheet.create({
   textLight: {
-    fontSize: 18,
+    fontSize: Layout.input.text,
     color: Colors.text.light,
   },
   textDark: {
-    fontSize: 18,
+    fontSize: Layout.input.text,
     color: Colors.text.dark,
   },
 });
