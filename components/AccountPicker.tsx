@@ -63,6 +63,7 @@ export function AccountPicker() {
           Store.transfer.account.error.clear();
           Store.transfer.account.value.set(selectedAcc as string); // TODO -- Fix type
         }}
+        spellCheck={false}
         style={labelStyle}
       >
         {accounts.map((acc) => (
