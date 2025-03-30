@@ -11,6 +11,7 @@ import { Text } from "react-native-ui-lib";
 export default function TabLayout() {
   return (
     <Tabs
+      initialRouteName="transfer"
       screenOptions={{
         headerShown: false,
         tabBarButton: HapticTab,
