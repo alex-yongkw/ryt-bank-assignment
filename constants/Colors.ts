@@ -39,8 +39,12 @@ export const Colors = {
     dark: "#2D2D2D",
   },
   card: {
-    light: "#121212",
+    light: "#f5f5f5",
     dark: "#1e1e1e",
+  },
+  border: {
+    light: "#e0e0e0",
+    dark: "#676767",
   },
   text: {
     light: "#1a1a1a",
