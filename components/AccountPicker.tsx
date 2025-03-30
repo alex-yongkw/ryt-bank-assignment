@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Picker, PickerModes, PickerValue, View } from "react-native-ui-lib";
 import { InputLabel } from "./ui/InputLabel";
 import { Store } from "@/store";
@@ -7,8 +7,7 @@ import { useColorScheme } from "@/hooks/useColorScheme.web";
 import { StyleSheet } from "react-native";
 import { Colors } from "@/constants/Colors";
 import { Layout } from "@/constants/Layout";
-import { AccountService } from "@/services/account";
-import { useFocusEffect } from "expo-router";
+import { formatCurency } from "@/utils/number-formatter";
 
 type Account = {
   id: string;
@@ -16,9 +15,13 @@ type Account = {
   balance: number;
 };
 
+const accounts: Account[] = [
+  { id: "001", name: "Checking Account", balance: 1000.05 },
+  { id: "002", name: "Savings Account", balance: 500.2 },
+];
+
 export function AccountPicker() {
   const colorScheme = useColorScheme();
-  const [accounts, setAccounts] = useState<Account[]>([]);
   const [selectedAccount, setSelectedAccount] = useState<PickerValue>("");
   const [inputError, setInputError] = useState<string>("");
 
@@ -29,27 +32,6 @@ export function AccountPicker() {
   const placeholderTextColor = useMemo(() => {
     return colorScheme === "light" ? Colors.text.light : Colors.text.dark;
   }, [colorScheme]);
-
-  const getBankAccounts = useCallback(async () => {
-    const accountService = await AccountService.getInstance();
-
-    const result = await accountService.getAll();
-
-    setAccounts(
-      result.map((r) => ({
-        id: r.id,
-        name: r.name,
-        balance: r.balance,
-      }))
-    );
-  }, []);
-
-  useFocusEffect(
-    // useCallback to prevent infinite loops
-    useCallback(() => {
-      getBankAccounts();
-    }, [])
-  );
 
   // subscribe to value change
   useEffect(() => {
@@ -84,7 +66,11 @@ export function AccountPicker() {
         style={labelStyle}
       >
         {accounts.map((acc) => (
-          <Picker.Item key={acc.id} label={acc.name} value={acc.id} />
+          <Picker.Item
+            key={acc.id}
+            label={`${acc.name} - MYR ${formatCurency(acc.balance)}`}
+            value={acc.id}
+          />
         ))}
       </Picker>
       <InputError label={inputError} />
