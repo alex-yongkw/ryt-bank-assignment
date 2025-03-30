@@ -10,7 +10,7 @@ type Props = {
 
 export function PopupModal({ visible, children }: Props) {
   return (
-    <SafeAreaView style={styles.centeredView}>
+    <SafeAreaView>
       <Modal animationType="fade" transparent visible={visible}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>{children}</View>
