@@ -2,11 +2,12 @@ import { TransactionHistoryCard } from "@/components/TransactionHistoryCard";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 import { Colors } from "@/constants/Colors";
 import { Layout } from "@/constants/Layout";
+import { useColorScheme } from "@/hooks/useColorScheme.web";
 import { TransactionHistoryService } from "@/services/transaction-history";
 import { TransferType } from "@/types";
 import { formatCustomRelativeDate } from "@/utils/date-formatter";
 import { useFocusEffect } from "expo-router";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { FlatList, StyleSheet } from "react-native";
 import { View } from "react-native-ui-lib";
 
@@ -20,6 +21,14 @@ type TransactionHistory = {
 };
 
 export default function HomeScreen() {
+  const colorScheme = useColorScheme();
+
+  const viewContainerStyle = useMemo(() => {
+    return colorScheme === "light"
+      ? styles.viewContainerLight
+      : styles.viewContainerDark;
+  }, [colorScheme]);
+
   const [transactionHistory, setTransactionHistory] = useState<
     TransactionHistory[]
   >([]);
@@ -51,7 +60,7 @@ export default function HomeScreen() {
   );
 
   return (
-    <View style={styles.viewContainer}>
+    <View style={viewContainerStyle}>
       <SectionLabel label="Transaction History" />
       <FlatList
         data={transactionHistory}
@@ -75,9 +84,13 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
-  viewContainer: {
+  viewContainerLight: {
     padding: Layout.content.padding,
-    backgroundColor: Colors.light.background,
+    backgroundColor: Colors.background.light,
+  },
+  viewContainerDark: {
+    padding: Layout.content.padding,
+    backgroundColor: Colors.background.dark,
   },
   listItem: {
     marginBottom: Layout.transactionHistory.gap,
