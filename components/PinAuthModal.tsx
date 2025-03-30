@@ -55,7 +55,7 @@ export function PinAuthModal({ visible, onCorrectPin, onCancel }: Props) {
         <Button
           label="Cancel"
           size={Button.sizes.large}
-          backgroundColor={Colors.button.danger}
+          backgroundColor={Colors.utility.red}
           borderRadius={Layout.actionButton.borderRadius}
           onPress={onCancel}
         />

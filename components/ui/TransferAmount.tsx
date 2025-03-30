@@ -11,7 +11,7 @@ type Props = {
 
 export function TransferAmount({ type, amount }: Props) {
   const color = useMemo(
-    () => (type === "in" ? Colors.transferType.in : Colors.transferType.out),
+    () => (type === "in" ? Colors.utility.green : Colors.utility.red),
     [type]
   );
 

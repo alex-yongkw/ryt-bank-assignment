@@ -15,7 +15,7 @@ export function TransferErrorModal({ visible, message, onClose }: Props) {
   return (
     <PopupModal visible={visible}>
       <View style={styles.imageContainer}>
-        <MaterialIcons name="error" size={120} color={Colors.error} />
+        <MaterialIcons name="error" size={120} color={Colors.utility.red} />
       </View>
       <Text text70 style={styles.errorMessage}>
         {message}
@@ -23,7 +23,7 @@ export function TransferErrorModal({ visible, message, onClose }: Props) {
       <Button
         label="Close"
         outline
-        outlineColor={Colors.button.danger}
+        outlineColor={Colors.utility.red}
         outlineWidth={2}
         size={Button.sizes.large}
         borderRadius={Layout.actionButton.borderRadius}

@@ -15,7 +15,11 @@ export function TransferSuccessModal({ visible, message, onClose }: Props) {
   return (
     <PopupModal visible={visible}>
       <View style={styles.imageContainer}>
-        <MaterialIcons name="check-circle" size={120} color={Colors.success} />
+        <MaterialIcons
+          name="check-circle"
+          size={120}
+          color={Colors.utility.green}
+        />
       </View>
       <Text text70 style={styles.message}>
         {message}
@@ -23,7 +27,7 @@ export function TransferSuccessModal({ visible, message, onClose }: Props) {
       <Button
         label="Close"
         outline
-        outlineColor={Colors.button.success}
+        outlineColor={Colors.utility.green}
         outlineWidth={2}
         size={Button.sizes.large}
         borderRadius={Layout.actionButton.borderRadius}
