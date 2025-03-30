@@ -45,6 +45,12 @@ This project is build using the following packages:
 - Mock API status can be change using the 'setting' icon on the top right of the App Header.
 - The app will use dark/light theme based on device OS theme setting.
 
+## Things that can be improved
+
+- The dark/light theme code is kind bloated and need to cleanup.
+- Click on the transaction history will only pre-fill the recipient input field, aas the amount field is not controlled & I have not yet found way to pre-fill the amount input field.
+- Authentication function can be move into a custom hook.
+
 ## Learn more
 
 To learn more about developing your project with Expo, look at the following resources:
