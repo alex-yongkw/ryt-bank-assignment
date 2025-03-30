@@ -16,12 +16,12 @@ type Recipient = {
 
 // TODO -- get recipient from contact list
 const recipients: Recipient[] = [
-  { id: "001", name: "James", phoneNumber: "0171234561" },
-  { id: "002", name: "Emily", phoneNumber: "0171234562" },
-  { id: "003", name: "Michael", phoneNumber: "0171234563" },
-  { id: "004", name: "Olivia", phoneNumber: "0171234564" },
-  { id: "005", name: "David", phoneNumber: "0171234565" },
-  { id: "006", name: "Emma", phoneNumber: "0171234566" },
+  { id: "001", name: "James", phoneNumber: "017-1234561" },
+  { id: "002", name: "Emily", phoneNumber: "013-9999990" },
+  { id: "003", name: "Michael", phoneNumber: "016-1234563" },
+  { id: "004", name: "Olivia", phoneNumber: "017-1234564" },
+  { id: "005", name: "David", phoneNumber: "019-1234565" },
+  { id: "006", name: "Emma", phoneNumber: "013-1234566" },
 ];
 
 export function RecipientPicker() {
@@ -39,7 +39,7 @@ export function RecipientPicker() {
 
   // subscribe to value change
   useEffect(() => {
-    const unsubscribe = Store.transfer.recipient.value.subscribe((newVal) => {
+    const unsubscribe = Store.transfer.recipientId.value.subscribe((newVal) => {
       setSelectedRecipient(newVal);
     });
 
@@ -48,7 +48,7 @@ export function RecipientPicker() {
 
   // subscribe to input error change
   useEffect(() => {
-    const unsubscribe = Store.transfer.recipient.error.subscribe((newVal) => {
+    const unsubscribe = Store.transfer.recipientId.error.subscribe((newVal) => {
       setInputError(newVal);
     });
 
@@ -64,13 +64,24 @@ export function RecipientPicker() {
         placeholder={"Select recipient"}
         placeholderTextColor={placeholderTextColor}
         onChange={(selectedRecipient) => {
-          Store.transfer.recipient.error.clear();
-          Store.transfer.recipient.value.set(selectedRecipient as string);
+          Store.transfer.recipientId.error.clear();
+          Store.transfer.recipientId.value.set(selectedRecipient as string);
+
+          const recipientName = recipients.filter(
+            (r) => r.id === selectedRecipient
+          );
+          Store.transfer.recipientName.value.set(
+            recipientName[0].name as string
+          );
         }}
         style={labelStyle}
       >
         {recipients.map((acc) => (
-          <Picker.Item label={acc.name} key={acc.id} value={acc.id} />
+          <Picker.Item
+            key={acc.id}
+            label={`${acc.name} (${acc.phoneNumber})`}
+            value={acc.id}
+          />
         ))}
       </Picker>
       <InputError label={inputError} />

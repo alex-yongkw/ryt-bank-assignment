@@ -53,7 +53,7 @@ export function TransferSuccessModal({
         To: {to}
       </Text>
       <Text text70 style={detailsStyle}>
-        Amount: {formatCurency(amount)}
+        Amount: MYR {formatCurency(amount)}
       </Text>
       {note && (
         <Text text70 style={detailsStyle}>

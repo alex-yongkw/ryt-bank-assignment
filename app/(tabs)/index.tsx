@@ -46,7 +46,7 @@ export default function TransferScreen() {
   // validate form and set error msg to inputs if any.
   const validateForm = useCallback(() => {
     const account = Store.transfer.account.value.get();
-    const recipient = Store.transfer.recipient.value.get();
+    const recipient = Store.transfer.recipientId.value.get();
     const amount = Store.transfer.amount.value.get();
 
     if (!account) {
@@ -54,7 +54,7 @@ export default function TransferScreen() {
     }
 
     if (!recipient) {
-      Store.transfer.recipient.error.set(ErrorMsg.recipient);
+      Store.transfer.recipientId.error.set(ErrorMsg.recipient);
     }
 
     if (isNaN(amount)) {
@@ -73,7 +73,7 @@ export default function TransferScreen() {
   // check if there's any input error.
   const isFormContainError = useCallback(() => {
     const accountError = Store.transfer.account.error.get();
-    const recipientError = Store.transfer.recipient.error.get();
+    const recipientError = Store.transfer.recipientId.error.get();
     const amountError = Store.transfer.amount.error.get();
 
     return exist(accountError) || exist(recipientError) || exist(amountError);
@@ -98,7 +98,8 @@ export default function TransferScreen() {
     setShowTransferProgress(false);
 
     const account = Store.transfer.account.value.get();
-    const recipient = Store.transfer.recipient.value.get();
+    const recipientId = Store.transfer.recipientId.value.get();
+    const recipientName = Store.transfer.recipientName.value.get();
     const amount = Store.transfer.amount.value.get();
     const note = Store.transfer.note.value.get();
 
@@ -113,13 +114,14 @@ export default function TransferScreen() {
         const recordId = await transactionHistoryService.insertTransactionRow({
           transferType: "in",
           account,
-          userName: recipient,
+          recipientId: recipientId,
+          recipientName: recipientName,
           amount,
           note,
         });
 
         setTransferSuccessDetails({
-          to: recipient,
+          to: recipientName,
           amount,
           note,
           ref: recordId as string,

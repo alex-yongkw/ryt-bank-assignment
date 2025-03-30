@@ -48,7 +48,7 @@ export function TransactionHistoryCard({
   return (
     <Card
       onPress={() => {
-        Store.transfer.recipient.value.set(name);
+        Store.transfer.recipientId.value.set(name);
         router.navigate("/(tabs)");
       }}
       style={cardStyle}

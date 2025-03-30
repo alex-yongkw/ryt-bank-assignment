@@ -44,7 +44,7 @@ export default function HomeScreen() {
       result.map((r) => ({
         id: r.id,
         type: r.transferType,
-        name: r.userName,
+        name: r.recipientName,
         amount: r.amount,
         note: r.note,
         timestamp: formatCustomRelativeDate(r.createdOn),

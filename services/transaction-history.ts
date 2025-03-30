@@ -11,7 +11,8 @@ type TransactionHistoryRow = {
   id: string;
   account: string;
   transferType: TransferType;
-  userName: string;
+  recipientId: string;
+  recipientName: string;
   amount: number;
   note: string;
   createdOn: number; // unix timestamp in seconds
@@ -29,12 +30,15 @@ export class TransactionHistoryService {
 
   private async createTable() {
     try {
+      await this.db.execAsync(`DROP TABLE IF EXISTS ${TABLE_NAME};`);
+
       await this.db.execAsync(
         `CREATE TABLE IF NOT EXISTS ${TABLE_NAME} (
           id TEXT PRIMARY KEY NOT NULL,
           account TEXT NOT NULL,
           transferType TEXT NOT NULL,
-          userName TEXT NOT NULL,
+          recipientId TEXT NOT NULL,
+          recipientName TEXT NOT NULL,
           amount INTEGER NOT NULL,
           note TEXT,
           createdOn INTEGER NOT NULL
@@ -71,9 +75,9 @@ export class TransactionHistoryService {
   public async insertTransactionRow(transaction: Transaction) {
     const statement = await this.db.prepareAsync(
       `INSERT INTO ${TABLE_NAME} (
-        id, account, transferType, userName, amount, note, createdOn
+        id, account, transferType, recipientId, recipientName, amount, note, createdOn
       ) VALUES (
-        $id, $account, $transferType, $userName, $amount, $note, $createdOn
+        $id, $account, $transferType, $recipientId, $recipientName, $amount, $note, $createdOn
       );`
     );
 
@@ -84,7 +88,8 @@ export class TransactionHistoryService {
         $id: id,
         $account: transaction.account,
         $transferType: transaction.transferType,
-        $userName: transaction.userName,
+        $recipientId: transaction.recipientId,
+        $recipientName: transaction.recipientName,
         $amount: transaction.amount,
         $note: transaction.note,
         $createdOn: Date.now() / 1000, // unix time in seconds

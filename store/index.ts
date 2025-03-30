@@ -35,19 +35,23 @@ export const Store = {
         },
       },
     },
-    recipient: {
+    recipientId: {
       value: {
         set: (recipient: string) => {
-          duix.set("recipient", recipient, { checkForChangesInTheValue: true });
+          duix.set("recipientId", recipient, {
+            checkForChangesInTheValue: true,
+          });
         },
         reset: () => {
-          duix.set("recipient", undefined, { checkForChangesInTheValue: true });
+          duix.set("recipientId", undefined, {
+            checkForChangesInTheValue: true,
+          });
         },
         get: (): string => {
-          return duix.get("recipient");
+          return duix.get("recipientId");
         },
         subscribe: (callback: SubscribeCallback<string>) => {
-          return duix.subscribe("recipient", callback);
+          return duix.subscribe("recipientId", callback);
         },
       },
       error: {
@@ -66,6 +70,18 @@ export const Store = {
         },
         subscribe: (callback: SubscribeCallback<string>) => {
           return duix.subscribe("recipientErrorMsg", callback);
+        },
+      },
+    },
+    recipientName: {
+      value: {
+        set: (recipient: string) => {
+          duix.set("recipientName", recipient, {
+            checkForChangesInTheValue: true,
+          });
+        },
+        get: (): string => {
+          return duix.get("recipientName");
         },
       },
     },
