@@ -18,7 +18,7 @@ import { Store } from "@/store";
 import { exist } from "@/utils/check-error";
 import * as LocalAuthentication from "expo-local-authentication";
 import { useCallback, useMemo, useState } from "react";
-import { Alert, ScrollView, StyleSheet } from "react-native";
+import { Alert, StyleSheet } from "react-native";
 import { View } from "react-native-ui-lib";
 
 type TransferDetails = {
@@ -192,12 +192,6 @@ export default function TransferScreen() {
     }
   }, [validateForm]);
 
-  const containerStyle = useMemo(() => {
-    return colorScheme === "light"
-      ? styles.containerLight
-      : styles.containerDark;
-  }, [colorScheme]);
-
   const viewContainerStyle = useMemo(() => {
     return colorScheme === "light"
       ? styles.viewContainerLight
@@ -205,62 +199,51 @@ export default function TransferScreen() {
   }, [colorScheme]);
 
   return (
-    <View style={containerStyle}>
-      <ScrollView style={viewContainerStyle}>
-        <SectionLabel label="Transfer Money" />
-        <AccountPicker />
-        <ArrowDownIcon />
-        <RecipientPicker />
-        <AmountInput />
-        <OptionalNoteInput />
-        {/* <ActionButton label="Send !" onPress={initiateFundTransfer} /> */}
-        <PinAuthModal
-          visible={useAppPin}
-          onCorrectPin={() => {
-            setUseAppPin(false);
-            requestFundTransfer();
-          }}
-          onCancel={() => setUseAppPin(false)}
-        />
-        <TransferProgressModal visible={showTransferProgress} />
-        <TransferErrorModal
-          visible={showTransferError}
-          message={transferErrorMsg}
-          onClose={() => setShowTransferError(false)}
-        />
-        <TransferSuccessModal
-          visible={showTransferSuccess}
-          message="Transfer Success !"
-          to={transferSuccessDetails.to}
-          amount={transferSuccessDetails.amount}
-          note={transferSuccessDetails.note}
-          referenceNo={transferSuccessDetails.ref}
-          onClose={() => setShowTransferSuccess(false)}
-        />
-      </ScrollView>
+    <View style={viewContainerStyle}>
+      <SectionLabel label="Transfer Money" />
+      <AccountPicker />
+      <ArrowDownIcon />
+      <RecipientPicker />
+      <AmountInput />
+      <OptionalNoteInput />
       <ActionButton label="Send !" onPress={initiateFundTransfer} />
+      <PinAuthModal
+        visible={useAppPin}
+        onCorrectPin={() => {
+          setUseAppPin(false);
+          requestFundTransfer();
+        }}
+        onCancel={() => setUseAppPin(false)}
+      />
+      <TransferProgressModal visible={showTransferProgress} />
+      <TransferErrorModal
+        visible={showTransferError}
+        message={transferErrorMsg}
+        onClose={() => setShowTransferError(false)}
+      />
+      <TransferSuccessModal
+        visible={showTransferSuccess}
+        message="Transfer Success !"
+        to={transferSuccessDetails.to}
+        amount={transferSuccessDetails.amount}
+        note={transferSuccessDetails.note}
+        referenceNo={transferSuccessDetails.ref}
+        onClose={() => setShowTransferSuccess(false)}
+      />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  containerLight: {
-    flex: 1,
-    padding: Layout.content.padding,
-    backgroundColor: Colors.background.light,
-  },
-  containerDark: {
-    flex: 1,
-    padding: Layout.content.padding,
-    backgroundColor: Colors.background.dark,
-  },
   viewContainerLight: {
     flex: 1,
+    padding: Layout.content.padding,
     backgroundColor: Colors.background.light,
     gap: Layout.form.gap,
   },
   viewContainerDark: {
     flex: 1,
+    padding: Layout.content.padding,
     backgroundColor: Colors.background.dark,
     gap: Layout.form.gap,
   },
