@@ -16,12 +16,12 @@ type Recipient = {
 
 // TODO -- get recipient from contact list
 const recipients: Recipient[] = [
-  { id: "001", name: "user001", phoneNumber: "0171234561" },
-  { id: "002", name: "user002", phoneNumber: "0171234562" },
-  { id: "003", name: "user003", phoneNumber: "0171234563" },
-  { id: "004", name: "user004", phoneNumber: "0171234564" },
-  { id: "005", name: "user005", phoneNumber: "0171234565" },
-  { id: "006", name: "user006", phoneNumber: "0171234566" },
+  { id: "001", name: "James", phoneNumber: "0171234561" },
+  { id: "002", name: "Emily", phoneNumber: "0171234562" },
+  { id: "003", name: "Michael", phoneNumber: "0171234563" },
+  { id: "004", name: "Olivia", phoneNumber: "0171234564" },
+  { id: "005", name: "David", phoneNumber: "0171234565" },
+  { id: "006", name: "Emma", phoneNumber: "0171234566" },
 ];
 
 export function RecipientPicker() {
