@@ -113,4 +113,19 @@ export const Store = {
       },
     },
   },
+  apiSettings: {
+    value: {
+      set: (setting: string) => {
+        duix.set("apiSettings", setting, {
+          checkForChangesInTheValue: true,
+        });
+      },
+      get: (): string => {
+        return duix.get("apiSettings");
+      },
+      subscribe: (callback: SubscribeCallback<string>) => {
+        return duix.subscribe("apiSettings", callback);
+      },
+    },
+  },
 };
