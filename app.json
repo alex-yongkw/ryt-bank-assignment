@@ -20,7 +20,11 @@
         "backgroundColor": "#ffffff"
       },
       "package": "com.rytbank.assignment",
-      "versionCode": 1
+      "versionCode": 1,
+      "permissions": [
+        "android.permission.USE_BIOMETRIC",
+        "android.permission.USE_FINGERPRINT"
+      ]
     },
     "web": {
       "bundler": "metro",
@@ -48,6 +52,15 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "0a1dcfd7-82a3-4e71-a881-ac3944e6e78f"
+      }
+    },
+    "owner": "blaze_spirit"
   }
 }
