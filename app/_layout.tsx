@@ -11,12 +11,14 @@ import { useFonts } from "expo-font";
 import { Slot } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
-import { useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { StyleSheet } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { View } from "react-native-ui-lib";
 
 import "react-native-reanimated";
+import { AccountService } from "@/services/account";
+import { TransactionHistoryService } from "@/services/transaction-history";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -32,6 +34,20 @@ export default function RootLayout() {
       ? styles.safeAreaContainerLight
       : styles.safeAreaContainerDark;
   }, [colorScheme]);
+
+  // Initial database tables setup
+  const setupDatabaseTables = useCallback(async () => {
+    const accountService = await AccountService.getInstance();
+    const transactionHistoryService =
+      await TransactionHistoryService.getInstance();
+
+    await accountService.initAccounts();
+    await transactionHistoryService.initTransctionHistoryTable();
+  }, []);
+
+  useEffect(() => {
+    setupDatabaseTables();
+  }, []);
 
   useEffect(() => {
     if (loaded) {
