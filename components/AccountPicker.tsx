@@ -16,11 +16,6 @@ type Account = {
   balance: number;
 };
 
-const accounts: Account[] = [
-  { id: "001", name: "Checking Account", balance: 1000 },
-  { id: "002", name: "Savings Account", balance: 500 },
-];
-
 export function AccountPicker() {
   const colorScheme = useColorScheme();
   const [accounts, setAccounts] = useState<Account[]>([]);
@@ -89,7 +84,7 @@ export function AccountPicker() {
         style={labelStyle}
       >
         {accounts.map((acc) => (
-          <Picker.Item label={acc.name} key={acc.id} value={acc.id} />
+          <Picker.Item key={acc.id} label={acc.name} value={acc.id} />
         ))}
       </Picker>
       <InputError label={inputError} />
