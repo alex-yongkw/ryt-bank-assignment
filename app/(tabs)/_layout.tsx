@@ -1,14 +1,28 @@
 import { HapticTab } from "@/components/HapticTab";
 import TabBarBackground from "@/components/ui/TabBarBackground";
 import { Colors } from "@/constants/Colors";
+import { useColorScheme } from "@/hooks/useColorScheme.web";
 import Feather from "@expo/vector-icons/Feather";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { Tabs } from "expo-router";
-import React from "react";
+import React, { useCallback, useMemo } from "react";
 import { Platform } from "react-native";
 import { Text } from "react-native-ui-lib";
 
 export default function TabLayout() {
+  const colorScheme = useColorScheme();
+
+  const getTabIconColor = useCallback(
+    (focused: boolean, color: string) => {
+      if (colorScheme === "light") {
+        return focused ? Colors.primary.brand.light : color;
+      }
+
+      return focused ? Colors.primary.brand.dark : color;
+    },
+    [colorScheme]
+  );
+
   return (
     <Tabs
       screenOptions={{
@@ -28,7 +42,7 @@ export default function TabLayout() {
         name="index"
         options={{
           tabBarLabel: ({ focused, color }) => (
-            <Text text90 color={focused ? Colors.brand : color}>
+            <Text text90 color={getTabIconColor(focused, color)}>
               Transfer
             </Text>
           ),
@@ -36,7 +50,7 @@ export default function TabLayout() {
             <Feather
               name="send"
               size={24}
-              color={focused ? Colors.brand : color}
+              color={getTabIconColor(focused, color)}
             />
           ),
           animation: "shift",
@@ -46,7 +60,7 @@ export default function TabLayout() {
         name="history"
         options={{
           tabBarLabel: ({ focused, color }) => (
-            <Text text90 color={focused ? Colors.brand : color}>
+            <Text text90 color={getTabIconColor(focused, color)}>
               History
             </Text>
           ),
@@ -54,7 +68,7 @@ export default function TabLayout() {
             <MaterialIcons
               name="history"
               size={24}
-              color={focused ? Colors.brand : color}
+              color={getTabIconColor(focused, color)}
             />
           ),
           animation: "shift",

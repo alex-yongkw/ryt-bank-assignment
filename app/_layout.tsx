@@ -1,4 +1,6 @@
 import { AppHeader } from "@/components/AppHeader";
+import { Colors } from "@/constants/Colors";
+import { Layout } from "@/constants/Layout";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import {
   DarkTheme,
@@ -9,11 +11,11 @@ import { useFonts } from "expo-font";
 import { Slot } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
+import { StyleSheet } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { View } from "react-native-ui-lib";
-import { Layout } from "@/constants/Layout";
-import { StyleSheet } from "react-native";
+
 import "react-native-reanimated";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -24,6 +26,12 @@ export default function RootLayout() {
   const [loaded] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
   });
+
+  const safeAreaContainerStyle = useMemo(() => {
+    return colorScheme === "light"
+      ? styles.safeAreaContainerLight
+      : styles.safeAreaContainerDark;
+  }, [colorScheme]);
 
   useEffect(() => {
     if (loaded) {
@@ -39,7 +47,7 @@ export default function RootLayout() {
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <StatusBar style="auto" />
       <SafeAreaProvider>
-        <SafeAreaView style={styles.safeAreaContainer}>
+        <SafeAreaView style={safeAreaContainerStyle}>
           <View style={styles.viewContainer}>
             <AppHeader />
           </View>
@@ -51,8 +59,13 @@ export default function RootLayout() {
 }
 
 const styles = StyleSheet.create({
-  safeAreaContainer: {
+  safeAreaContainerLight: {
     flex: 1,
+    backgroundColor: Colors.background.light,
+  },
+  safeAreaContainerDark: {
+    flex: 1,
+    backgroundColor: Colors.background.dark,
   },
   viewContainer: {
     padding: Layout.page.padding,
