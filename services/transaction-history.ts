@@ -30,8 +30,6 @@ export class TransactionHistoryService {
 
   private async createTable() {
     try {
-      await this.db.execAsync(`DROP TABLE IF EXISTS ${TABLE_NAME};`);
-
       await this.db.execAsync(
         `CREATE TABLE IF NOT EXISTS ${TABLE_NAME} (
           id TEXT PRIMARY KEY NOT NULL,
