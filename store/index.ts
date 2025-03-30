@@ -1,3 +1,4 @@
+import { ApiSetting } from "@/types";
 import duix from "duix";
 
 type SubscribeCallback<T> = (newValue: T, oldValue: T) => void;
@@ -115,15 +116,15 @@ export const Store = {
   },
   apiSettings: {
     value: {
-      set: (setting: string) => {
+      set: (setting: ApiSetting) => {
         duix.set("apiSettings", setting, {
           checkForChangesInTheValue: true,
         });
       },
-      get: (): string => {
+      get: (): ApiSetting => {
         return duix.get("apiSettings");
       },
-      subscribe: (callback: SubscribeCallback<string>) => {
+      subscribe: (callback: SubscribeCallback<ApiSetting>) => {
         return duix.subscribe("apiSettings", callback);
       },
     },

@@ -12,17 +12,12 @@ import { Layout } from "@/constants/Layout";
 import { useColorScheme } from "@/hooks/useColorScheme.web";
 import { useEffect, useState } from "react";
 import { Store } from "@/store";
+import { ApiSetting } from "@/types";
 
 type Props = {
   visible: boolean;
   onClose: () => void;
 };
-
-type ApiSetting =
-  | "success"
-  | "insufficientFund"
-  | "networkError"
-  | "unknownError";
 
 export function SettingModal({ visible, onClose }: Props) {
   const colorScheme = useColorScheme();
