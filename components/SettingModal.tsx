@@ -48,7 +48,7 @@ export function SettingModal({ visible, onClose }: Props) {
           initialValue={selectedApiSetting}
           // TODO -- Fix type
           onValueChange={(setting) => {
-            Store.transfer.account.value.set(setting);
+            Store.apiSettings.value.set(setting);
           }}
         >
           <RadioButton value={"success"} label={"Success"} />
