@@ -58,17 +58,17 @@ export class TransactionHistoryService {
     return TransactionHistoryService.instance;
   }
 
-  public async getAll(): Promise<TransactionHistoryRow[]> {
+  public async initTransctionHistoryTable() {
     await this.createTable();
+  }
 
+  public async getAll(): Promise<TransactionHistoryRow[]> {
     return await this.db.getAllAsync(
       `SELECT * FROM ${TABLE_NAME} ORDER BY createdOn DESC`
     );
   }
 
   public async insertTransactionRow(transaction: Transaction) {
-    await this.createTable();
-
     const statement = await this.db.prepareAsync(
       `INSERT INTO ${TABLE_NAME} (
         id, account, transferType, userName, amount, note, createdOn
