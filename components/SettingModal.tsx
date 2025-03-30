@@ -10,7 +10,7 @@ import { PopupModal } from "./ui/PopupModal";
 import { Colors } from "@/constants/Colors";
 import { Layout } from "@/constants/Layout";
 import { useColorScheme } from "@/hooks/useColorScheme.web";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Store } from "@/store";
 import { ApiSetting } from "@/types";
 
@@ -24,6 +24,10 @@ export function SettingModal({ visible, onClose }: Props) {
   const [selectedApiSetting, setSelectedApiSetting] =
     useState<ApiSetting>("success");
 
+  const labelStyle = useMemo(() => {
+    return colorScheme === "light" ? styles.labelLight : styles.labelDark;
+  }, [colorScheme]);
+
   // subscribe to value change
   useEffect(() => {
     const unsubscribe = Store.apiSettings.value.subscribe((newVal) => {
@@ -35,7 +39,7 @@ export function SettingModal({ visible, onClose }: Props) {
 
   return (
     <PopupModal visible={visible}>
-      <Text text70 style={styles.errorMessage}>
+      <Text text70 style={labelStyle} marginB-16>
         Mock API Settings
       </Text>
       <View>
@@ -46,20 +50,27 @@ export function SettingModal({ visible, onClose }: Props) {
             Store.apiSettings.value.set(setting);
           }}
         >
-          <RadioButton value={"success"} label={"Success"} />
+          <RadioButton
+            value={"success"}
+            label={"Success"}
+            labelStyle={labelStyle}
+          />
           <RadioButton
             value={"insufficientFund"}
             label={"Insufficient Funds"}
+            labelStyle={labelStyle}
             marginT-10
           />
           <RadioButton
             value={"networkError"}
             label={"Network Error"}
+            labelStyle={labelStyle}
             marginT-10
           />
           <RadioButton
             value={"unknownError"}
             label={"Unknown Error"}
+            labelStyle={labelStyle}
             marginT-10
           />
         </RadioGroup>
@@ -87,7 +98,10 @@ const styles = StyleSheet.create({
     paddingLeft: 40,
     paddingRight: 40,
   },
-  errorMessage: {
-    marginBottom: 16,
+  labelLight: {
+    color: Colors.text.light,
+  },
+  labelDark: {
+    color: Colors.text.dark,
   },
 });
