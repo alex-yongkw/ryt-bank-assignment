@@ -5,6 +5,8 @@ import { Colors } from "@/constants/Colors";
 import { Layout } from "@/constants/Layout";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { formatCurency } from "@/utils/number-formatter";
+import { useColorScheme } from "@/hooks/useColorScheme.web";
+import { useMemo } from "react";
 
 type Props = {
   visible: boolean;
@@ -25,6 +27,16 @@ export function TransferSuccessModal({
   referenceNo,
   onClose,
 }: Props) {
+  const colorScheme = useColorScheme();
+
+  const messageStyle = useMemo(() => {
+    return colorScheme === "light" ? styles.messageLight : styles.messageDark;
+  }, [colorScheme]);
+
+  const detailsStyle = useMemo(() => {
+    return colorScheme === "light" ? styles.detailsLight : styles.detailsDark;
+  }, [colorScheme]);
+
   return (
     <PopupModal visible={visible}>
       <View style={styles.imageContainer}>
@@ -34,21 +46,21 @@ export function TransferSuccessModal({
           color={Colors.utility.green}
         />
       </View>
-      <Text text70 style={styles.message}>
+      <Text text70 style={messageStyle}>
         {message}
       </Text>
-      <Text text70 style={styles.details}>
+      <Text text70 style={detailsStyle}>
         To: {to}
       </Text>
-      <Text text70 style={styles.details}>
+      <Text text70 style={detailsStyle}>
         Amount: {formatCurency(amount)}
       </Text>
       {note && (
-        <Text text70 style={styles.details}>
+        <Text text70 style={detailsStyle}>
           Note: {note}
         </Text>
       )}
-      <Text text70 style={styles.details}>
+      <Text text70 style={detailsStyle}>
         Reference No. {referenceNo}
       </Text>
       <Button
@@ -69,11 +81,22 @@ const styles = StyleSheet.create({
     paddingLeft: 40,
     paddingRight: 40,
   },
-  message: {
+  messageLight: {
+    color: Colors.text.light,
     marginTop: 14,
     marginBottom: 16,
   },
-  details: {
+  messageDark: {
+    color: Colors.text.dark,
+    marginTop: 14,
+    marginBottom: 16,
+  },
+  detailsLight: {
+    color: Colors.text.light,
+    marginBottom: 6,
+  },
+  detailsDark: {
+    color: Colors.text.dark,
     marginBottom: 6,
   },
 });
