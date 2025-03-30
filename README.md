@@ -1,16 +1,23 @@
-# Welcome to your Expo app 👋
+# RytBank Interview Assignment
 
 This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
 
+## Requirement
+
+1. NodeJS (v22 LTS) [[link]](https://nodejs.org/en/download).
+2. Follow this guide to setup Dev enviroment [[Guide]](https://docs.expo.dev/get-started/set-up-your-environment/)
+
 ## Get started
 
-1. Install dependencies
+1. Clone the repo.
+
+2. Install dependencies
 
    ```bash
    npm install
    ```
 
-2. Start the app
+3. Start the app
 
    ```bash
     npx expo start
@@ -23,17 +30,20 @@ In the output, you'll find options to open the app in a
 - [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
 - [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## Project Info
 
-## Get a fresh project
+This project is build using the following packages:
 
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+- React Native UI Lib [[link]](https://wix.github.io/react-native-ui-lib/)
+  - This package provide most of the UI elements to build the functionlities of this app
+- duix [[link]](https://github.com/BrodaNoel/duix)
+  - A simple state management library to manage form input & settings states.
+- SQLite
+  - Transaction history are stored using SQLite database.
+- Auth
+  - If user device did not enrolled in any biometric or pin/pattern lock, transaction auth will fallback to use a hardcoded app in which is 123456.
+- Mock API status can be change using the 'setting' icon on the top right of the App Header.
+- The app will use dark/light theme based on device OS theme setting.
 
 ## Learn more
 
