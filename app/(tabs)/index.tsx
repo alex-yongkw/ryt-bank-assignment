@@ -12,15 +12,17 @@ import { SectionLabel } from "@/components/ui/SectionLabel";
 import { Colors } from "@/constants/Colors";
 import { ErrorMsg } from "@/constants/ErrorMsg";
 import { Layout } from "@/constants/Layout";
+import { useColorScheme } from "@/hooks/useColorScheme.web";
 import { TransactionHistoryService } from "@/services/transaction-history";
 import { Store } from "@/store";
 import { exist } from "@/utils/check-error";
 import * as LocalAuthentication from "expo-local-authentication";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { Alert, StyleSheet } from "react-native";
 import { View } from "react-native-ui-lib";
 
 export default function TransferScreen() {
+  const colorScheme = useColorScheme();
   const [useAppPin, setUseAppPin] = useState(false);
   const [showTransferProgress, setShowTransferProgress] = useState(false);
   const [showTransferError, setShowTransferError] = useState(false);
@@ -148,8 +150,14 @@ export default function TransferScreen() {
     }
   }, [validateForm]);
 
+  const viewContainerStyle = useMemo(() => {
+    return colorScheme === "light"
+      ? styles.viewContainerLight
+      : styles.viewContainerDark;
+  }, [colorScheme]);
+
   return (
-    <View style={styles.viewContainer}>
+    <View style={viewContainerStyle}>
       <SectionLabel label="Transfer Money" />
       <AccountPicker />
       <ArrowDownIcon />
@@ -181,9 +189,16 @@ export default function TransferScreen() {
 }
 
 const styles = StyleSheet.create({
-  viewContainer: {
+  viewContainerLight: {
+    flex: 1,
     padding: Layout.content.padding,
-    backgroundColor: Colors.light.background,
+    backgroundColor: Colors.background.light,
+    gap: Layout.form.gap,
+  },
+  viewContainerDark: {
+    flex: 1,
+    padding: Layout.content.padding,
+    backgroundColor: Colors.background.dark,
     gap: Layout.form.gap,
   },
 });
