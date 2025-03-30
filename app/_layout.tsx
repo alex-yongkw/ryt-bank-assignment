@@ -15,10 +15,10 @@ import { useCallback, useEffect, useMemo } from "react";
 import { StyleSheet } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { View } from "react-native-ui-lib";
-
 import "react-native-reanimated";
 import { AccountService } from "@/services/account";
 import { TransactionHistoryService } from "@/services/transaction-history";
+import { Store } from "@/store";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -47,6 +47,11 @@ export default function RootLayout() {
 
   useEffect(() => {
     setupDatabaseTables();
+  }, []);
+
+  // setup default API setting
+  useEffect(() => {
+    Store.apiSettings.value.set("success");
   }, []);
 
   useEffect(() => {
