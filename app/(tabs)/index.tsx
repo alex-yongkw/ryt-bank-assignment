@@ -88,22 +88,44 @@ export default function TransferScreen() {
     const amount = Store.transfer.amount.value.get();
     const note = Store.transfer.note.value.get();
 
-    const transactionHistoryService =
-      await TransactionHistoryService.getInstance();
+    const mockApiSetting = Store.apiSettings.value.get();
 
-    await transactionHistoryService.insertTransactionRow({
-      transferType: "in",
-      account,
-      userName: recipient,
-      amount,
-      note,
-    });
+    // show respective popup according to selected API setting.
+    switch (mockApiSetting) {
+      case "success": {
+        const transactionHistoryService =
+          await TransactionHistoryService.getInstance();
 
-    setShowTransferSuccess(true);
+        await transactionHistoryService.insertTransactionRow({
+          transferType: "in",
+          account,
+          userName: recipient,
+          amount,
+          note,
+        });
 
-    // TODO -- simulate API error
-    // setShowTransferError(true);
-    // setTransferErrorMsg("Unknown error occur, please try again.");
+        setShowTransferSuccess(true);
+        break;
+      }
+      case "insufficientFund": {
+        setTransferErrorMsg("Insufficient balance.");
+        setShowTransferError(true);
+        break;
+      }
+      case "networkError": {
+        setTransferErrorMsg("Network error, please try again.");
+        setShowTransferError(true);
+        break;
+      }
+      case "unknownError": {
+        setTransferErrorMsg("Unknown error, please try again.");
+        setShowTransferError(true);
+        break;
+      }
+      default: {
+        // TODO -- send error to Log rreporting tools
+      }
+    }
   }, []);
 
   const biometricOrFallbackAuth = useCallback(async () => {
