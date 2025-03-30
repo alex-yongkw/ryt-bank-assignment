@@ -21,6 +21,13 @@ import { useCallback, useMemo, useState } from "react";
 import { Alert, StyleSheet } from "react-native";
 import { View } from "react-native-ui-lib";
 
+type TransferDetails = {
+  to: string;
+  amount: number;
+  note?: string;
+  ref: string;
+};
+
 export default function TransferScreen() {
   const colorScheme = useColorScheme();
   const [useAppPin, setUseAppPin] = useState(false);
@@ -28,6 +35,13 @@ export default function TransferScreen() {
   const [showTransferError, setShowTransferError] = useState(false);
   const [transferErrorMsg, setTransferErrorMsg] = useState("");
   const [showTransferSuccess, setShowTransferSuccess] = useState(false);
+  const [transferSuccessDetails, setTransferSuccessDetails] =
+    useState<TransferDetails>({
+      to: "",
+      amount: 0,
+      note: "",
+      ref: "",
+    });
 
   // validate form and set error msg to inputs if any.
   const validateForm = useCallback(() => {
@@ -96,12 +110,19 @@ export default function TransferScreen() {
         const transactionHistoryService =
           await TransactionHistoryService.getInstance();
 
-        await transactionHistoryService.insertTransactionRow({
+        const recordId = await transactionHistoryService.insertTransactionRow({
           transferType: "in",
           account,
           userName: recipient,
           amount,
           note,
+        });
+
+        setTransferSuccessDetails({
+          to: recipient,
+          amount,
+          note,
+          ref: recordId as string,
         });
 
         setShowTransferSuccess(true);
@@ -138,7 +159,6 @@ export default function TransferScreen() {
         requestFundTransfer();
       } else {
         // TODO -- handle auth error
-        console.log("** auth result:", authResult);
       }
     } catch (err) {
       // TODO - send error to Log Reporting.
@@ -204,6 +224,10 @@ export default function TransferScreen() {
       <TransferSuccessModal
         visible={showTransferSuccess}
         message="Transfer Success !"
+        to={transferSuccessDetails.to}
+        amount={transferSuccessDetails.amount}
+        note={transferSuccessDetails.note}
+        referenceNo={transferSuccessDetails.ref}
         onClose={() => setShowTransferSuccess(false)}
       />
     </View>

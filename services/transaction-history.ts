@@ -78,8 +78,10 @@ export class TransactionHistoryService {
     );
 
     try {
-      return await statement.executeAsync({
-        $id: Crypto.randomUUID(),
+      const id = Crypto.randomUUID();
+
+      await statement.executeAsync({
+        $id: id,
         $account: transaction.account,
         $transferType: transaction.transferType,
         $userName: transaction.userName,
@@ -87,6 +89,8 @@ export class TransactionHistoryService {
         $note: transaction.note,
         $createdOn: Date.now() / 1000, // unix time in seconds
       });
+
+      return id;
     } catch (err) {
       // TODO -- send to log monitoring service.
       console.error(err);

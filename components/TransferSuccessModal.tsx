@@ -4,14 +4,27 @@ import { PopupModal } from "./ui/PopupModal";
 import { Colors } from "@/constants/Colors";
 import { Layout } from "@/constants/Layout";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import { formatCurency } from "@/utils/number-formatter";
 
 type Props = {
   visible: boolean;
   message: string;
+  to: string;
+  amount: number;
+  note?: string;
+  referenceNo: string;
   onClose: () => void;
 };
 
-export function TransferSuccessModal({ visible, message, onClose }: Props) {
+export function TransferSuccessModal({
+  visible,
+  message,
+  to,
+  amount,
+  note,
+  referenceNo,
+  onClose,
+}: Props) {
   return (
     <PopupModal visible={visible}>
       <View style={styles.imageContainer}>
@@ -23,6 +36,20 @@ export function TransferSuccessModal({ visible, message, onClose }: Props) {
       </View>
       <Text text70 style={styles.message}>
         {message}
+      </Text>
+      <Text text70 style={styles.details}>
+        To: {to}
+      </Text>
+      <Text text70 style={styles.details}>
+        Amount: {formatCurency(amount)}
+      </Text>
+      {note && (
+        <Text text70 style={styles.details}>
+          Note: {note}
+        </Text>
+      )}
+      <Text text70 style={styles.details}>
+        Reference No. {referenceNo}
       </Text>
       <Button
         label="Close"
@@ -45,5 +72,8 @@ const styles = StyleSheet.create({
   message: {
     marginTop: 14,
     marginBottom: 16,
+  },
+  details: {
+    marginBottom: 6,
   },
 });
