@@ -85,10 +85,12 @@ export default function HomeScreen() {
 
 const styles = StyleSheet.create({
   viewContainerLight: {
+    flex: 1,
     padding: Layout.content.padding,
     backgroundColor: Colors.background.light,
   },
   viewContainerDark: {
+    flex: 1,
     padding: Layout.content.padding,
     backgroundColor: Colors.background.dark,
   },
