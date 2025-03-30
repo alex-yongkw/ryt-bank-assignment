@@ -12,6 +12,7 @@ import { SectionLabel } from "@/components/ui/SectionLabel";
 import { Colors } from "@/constants/Colors";
 import { ErrorMsg } from "@/constants/ErrorMsg";
 import { Layout } from "@/constants/Layout";
+import { TransactionHistoryService } from "@/services/transaction-history";
 import { Store } from "@/store";
 import { exist } from "@/utils/check-error";
 import * as LocalAuthentication from "expo-local-authentication";
@@ -80,18 +81,41 @@ export default function TransferScreen() {
 
     setShowTransferProgress(false);
 
-    // setShowTransferSuccess(true);
-    setShowTransferError(true);
-    setTransferErrorMsg("Unknown error occur, please try again.");
+    const account = Store.transfer.account.value.get();
+    const recipient = Store.transfer.recipient.value.get();
+    const amount = Store.transfer.amount.value.get();
+    const note = Store.transfer.note.value.get();
+
+    const transactionHistoryService =
+      await TransactionHistoryService.getInstance();
+
+    await transactionHistoryService.insertTransactionRow({
+      transferType: "in",
+      account,
+      userName: recipient,
+      amount,
+      note,
+    });
+
+    setShowTransferSuccess(true);
+
+    // TODO -- simulate API error
+    // setShowTransferError(true);
+    // setTransferErrorMsg("Unknown error occur, please try again.");
   }, []);
 
   const biometricOrFallbackAuth = useCallback(async () => {
     try {
-      const result = await LocalAuthentication.authenticateAsync({
+      const authResult = await LocalAuthentication.authenticateAsync({
         cancelLabel: "Cancel",
       });
 
-      console.log("** auth result:", result);
+      if (authResult.success) {
+        requestFundTransfer();
+      } else {
+        // TODO -- handle auth error
+        console.log("** auth result:", authResult);
+      }
     } catch (err) {
       // TODO - send error to Log Reporting.
 
