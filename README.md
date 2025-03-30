@@ -9,15 +9,16 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
 
 # tl;dr
 
-Scan this QR
-![Download](https://github.com/alex-yongkw/ryt-bank-assignment/blob/main/docs/apk-download.png?raw=true)
+Scan this QR to download the App.
+
+![Download](https://raw.githubusercontent.com/alex-yongkw/ryt-bank-assignment/refs/heads/main/docs/download-qr.png)
 
 - On devices running Android 8.0 (API level 26) and higher, you must navigate to the Install unknown apps system settings screen to enable app installations from a particular location (i.e. the web browser you are downloading the app from).
 - On devices running Android 7.1.1 (API level 25) and lower, you should enable the Unknown sources system setting, found in Settings > Security on your device.
 
 OR
 
-Visit this link [https://expo.dev/accounts/blaze_spirit/projects/ryt-bank-assignment/builds/5f7340a0-9fac-43fa-af1c-9732d5a9518a] to download the app to you test device and test it ! 😉
+Visit this link [[Download]](https://expo.dev/accounts/blaze_spirit/projects/ryt-bank-assignment/builds/508d637f-4c58-4d68-b057-3410b7a0f37b) to download the app to you test device and test it ! 😉
 
 ## Demo video
 
