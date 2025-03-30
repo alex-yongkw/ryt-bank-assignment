@@ -1,17 +1,16 @@
-import { Tabs } from "expo-router";
-import React from "react";
-import { Platform } from "react-native";
 import { HapticTab } from "@/components/HapticTab";
 import TabBarBackground from "@/components/ui/TabBarBackground";
 import { Colors } from "@/constants/Colors";
 import Feather from "@expo/vector-icons/Feather";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import { Tabs } from "expo-router";
+import React from "react";
+import { Platform } from "react-native";
 import { Text } from "react-native-ui-lib";
 
 export default function TabLayout() {
   return (
     <Tabs
-      initialRouteName="transfer"
       screenOptions={{
         headerShown: false,
         tabBarButton: HapticTab,
@@ -26,7 +25,7 @@ export default function TabLayout() {
       }}
     >
       <Tabs.Screen
-        name="transfer"
+        name="index"
         options={{
           tabBarLabel: ({ focused, color }) => (
             <Text text90 color={focused ? Colors.brand : color}>

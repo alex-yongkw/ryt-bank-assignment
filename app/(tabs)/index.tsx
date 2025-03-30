@@ -1,74 +1,165 @@
-import { Image, StyleSheet, Platform } from 'react-native';
+import { AccountPicker } from "@/components/AccountPicker";
+import { AmountInput } from "@/components/AmountInput";
+import { OptionalNoteInput } from "@/components/OptionalNoteInput";
+import { PinAuthModal } from "@/components/PinAuthModal";
+import { RecipientPicker } from "@/components/RecipientPicker";
+import { TransferErrorModal } from "@/components/TransferErrorModal";
+import { TransferProgressModal } from "@/components/TransferProgressModal";
+import { TransferSuccessModal } from "@/components/TransferSuccessModal";
+import { ActionButton } from "@/components/ui/ActionButton";
+import { ArrowDownIcon } from "@/components/ui/ArrowDownIcon";
+import { SectionLabel } from "@/components/ui/SectionLabel";
+import { Colors } from "@/constants/Colors";
+import { ErrorMsg } from "@/constants/ErrorMsg";
+import { Layout } from "@/constants/Layout";
+import { Store } from "@/store";
+import { exist } from "@/utils/check-error";
+import * as LocalAuthentication from "expo-local-authentication";
+import { useCallback, useState } from "react";
+import { Alert, StyleSheet } from "react-native";
+import { View } from "react-native-ui-lib";
 
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+export default function TransferScreen() {
+  const [useAppPin, setUseAppPin] = useState(false);
+  const [showTransferProgress, setShowTransferProgress] = useState(false);
+  const [showTransferError, setShowTransferError] = useState(false);
+  const [transferErrorMsg, setTransferErrorMsg] = useState("");
+  const [showTransferSuccess, setShowTransferSuccess] = useState(false);
 
-export default function HomeScreen() {
+  // validate form and set error msg to inputs if any.
+  const validateForm = useCallback(() => {
+    const account = Store.transfer.account.value.get();
+    const recipient = Store.transfer.recipient.value.get();
+    const amount = Store.transfer.amount.value.get();
+
+    if (!account) {
+      Store.transfer.account.error.set(ErrorMsg.account);
+    }
+
+    if (!recipient) {
+      Store.transfer.recipient.error.set(ErrorMsg.recipient);
+    }
+
+    if (isNaN(amount)) {
+      Store.transfer.amount.error.set(ErrorMsg.amount.invalid);
+
+      return; // skip the following amount checking.
+    }
+
+    if (amount < 1) {
+      Store.transfer.amount.error.set(ErrorMsg.amount.minimum);
+    }
+
+    return;
+  }, []);
+
+  // check if there's any input error.
+  const isFormContainError = useCallback(() => {
+    const accountError = Store.transfer.account.error.get();
+    const recipientError = Store.transfer.recipient.error.get();
+    const amountError = Store.transfer.amount.error.get();
+
+    return exist(accountError) || exist(recipientError) || exist(amountError);
+  }, []);
+
+  // 0 = Indicates no enrolled authentication.
+  // 1 = Indicates non-biometric authentication (e.g. PIN, Pattern).
+  // 2 = Indicates weak biometric authentication. For example, a 2D image-based face unlock.
+  // 3 = Indicates strong biometric authentication. For example, a fingerprint scan or 3D face unlock.
+  const getEnrolledSecurityLevel = useCallback(async () => {
+    return await LocalAuthentication.getEnrolledLevelAsync();
+  }, []);
+
+  const requestFundTransfer = useCallback(async () => {
+    setShowTransferProgress(true);
+
+    // Mock API
+    await new Promise((resolve) => {
+      setTimeout(resolve, 2000);
+    });
+
+    setShowTransferProgress(false);
+
+    // setShowTransferSuccess(true);
+    setShowTransferError(true);
+    setTransferErrorMsg("Unknown error occur, please try again.");
+  }, []);
+
+  const biometricOrFallbackAuth = useCallback(async () => {
+    try {
+      const result = await LocalAuthentication.authenticateAsync({
+        cancelLabel: "Cancel",
+      });
+
+      console.log("** auth result:", result);
+    } catch (err) {
+      // TODO - send error to Log Reporting.
+
+      Alert.alert(
+        "Authentication Error",
+        "Unknown error occur, please try again.",
+        [
+          {
+            text: "Dismiss",
+            style: "cancel",
+          },
+        ]
+      );
+    }
+  }, []);
+
+  const initiateFundTransfer = useCallback(async () => {
+    validateForm();
+
+    if (isFormContainError()) {
+      return;
+    }
+
+    // no security method enrolled, use App pin to authenticate
+    if ((await getEnrolledSecurityLevel()) === 0) {
+      setUseAppPin(true);
+    } else {
+      // Biometric authentication or fallback
+      await biometricOrFallbackAuth();
+    }
+  }, [validateForm]);
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12'
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{' '}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+    <View style={styles.viewContainer}>
+      <SectionLabel label="Transfer Money" />
+      <AccountPicker />
+      <ArrowDownIcon />
+      <RecipientPicker />
+      <AmountInput />
+      <OptionalNoteInput />
+      <ActionButton label="Send !" onPress={initiateFundTransfer} />
+      <PinAuthModal
+        visible={useAppPin}
+        onCorrectPin={() => {
+          setUseAppPin(false);
+          requestFundTransfer();
+        }}
+        onCancel={() => setUseAppPin(false)}
+      />
+      <TransferProgressModal visible={showTransferProgress} />
+      <TransferErrorModal
+        visible={showTransferError}
+        message={transferErrorMsg}
+        onClose={() => setShowTransferError(false)}
+      />
+      <TransferSuccessModal
+        visible={showTransferSuccess}
+        message="Transfer Success !"
+        onClose={() => setShowTransferSuccess(false)}
+      />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+  viewContainer: {
+    padding: Layout.content.padding,
+    backgroundColor: Colors.light.background,
+    gap: Layout.form.gap,
   },
 });
