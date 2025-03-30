@@ -1,8 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Picker, PickerModes, PickerValue, View } from "react-native-ui-lib";
 import { InputLabel } from "./ui/InputLabel";
 import { Store } from "@/store";
 import { InputError } from "./ui/InputError";
+import { useColorScheme } from "@/hooks/useColorScheme.web";
+import { StyleSheet } from "react-native";
+import { Colors } from "@/constants/Colors";
 
 type Account = {
   id: string;
@@ -16,8 +19,17 @@ const accounts: Account[] = [
 ];
 
 export function AccountPicker() {
+  const colorScheme = useColorScheme();
   const [selectedAccount, setSelectedAccount] = useState<PickerValue>("");
   const [inputError, setInputError] = useState<string>("");
+
+  const labelStyle = useMemo(() => {
+    return colorScheme === "light" ? styles.textLight : styles.textDark;
+  }, [colorScheme]);
+
+  const placeholderTextColor = useMemo(() => {
+    return colorScheme === "light" ? Colors.text.light : Colors.text.dark;
+  }, [colorScheme]);
 
   // subscribe to value change
   useEffect(() => {
@@ -44,10 +56,12 @@ export function AccountPicker() {
         mode={PickerModes.SINGLE}
         value={selectedAccount as string} // TODO -- Fix type
         placeholder={"Select account"}
+        placeholderTextColor={placeholderTextColor}
         onChange={(selectedAcc) => {
           Store.transfer.account.error.clear();
           Store.transfer.account.value.set(selectedAcc as string); // TODO -- Fix type
         }}
+        style={labelStyle}
       >
         {accounts.map((acc) => (
           <Picker.Item label={acc.name} key={acc.id} value={acc.id} />
@@ -57,3 +71,14 @@ export function AccountPicker() {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  textLight: {
+    fontSize: 18,
+    color: Colors.text.light,
+  },
+  textDark: {
+    fontSize: 18,
+    color: Colors.text.dark,
+  },
+});
