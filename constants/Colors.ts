@@ -13,7 +13,6 @@ export const Colors = {
       dark: "#ff9900",
     },
   },
-  secondary: {},
   background: {
     light: "#ffffff",
     dark: "#2D2D2D",
