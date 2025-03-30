@@ -1,12 +1,13 @@
 import { TransferType } from "@/types";
 import { StyleSheet } from "react-native";
 import { Card, Text, View } from "react-native-ui-lib";
-
+import { useRouter } from "expo-router";
 import { TransferAmount } from "./ui/TransferAmount";
 import { TransferTypeIcon } from "./ui/TransferTypeIcon";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme.web";
 import { useMemo } from "react";
+import { Store } from "@/store";
 
 type Props = {
   type: TransferType;
@@ -23,6 +24,7 @@ export function TransactionHistoryCard({
   note,
   timestamp,
 }: Props) {
+  const router = useRouter();
   const colorScheme = useColorScheme();
 
   const cardStyle = useMemo(() => {
@@ -46,8 +48,8 @@ export function TransactionHistoryCard({
   return (
     <Card
       onPress={() => {
-        // TODO - click to transfer again
-        console.log("pressed");
+        Store.transfer.recipient.value.set(name);
+        router.navigate("/(tabs)");
       }}
       style={cardStyle}
     >
