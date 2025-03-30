@@ -7,34 +7,26 @@ const tintColorLight = "#0a7ea4";
 const tintColorDark = "#fff";
 
 export const Colors = {
-  brand: "#0000e6",
-  transferType: {
-    in: "#22c55e",
-    out: "#ef4444",
-  },
-  button: {
-    success: "#22c55e",
-    danger: "#ef4444",
-  },
-  success: "#22c55e",
-  error: "#ef4444",
-  light: {
-    text: "#11181C",
-    background: "#fff",
-    tint: tintColorLight,
-    icon: "#687076",
-    tabIconDefault: "#687076",
-    tabIconSelected: tintColorLight,
-  },
-  dark: {
-    text: "#ECEDEE",
-    background: "#151718",
-    tint: tintColorDark,
-    icon: "#9BA1A6",
-    tabIconDefault: "#9BA1A6",
-    tabIconSelected: tintColorDark,
-  },
-
+  // transferType: {
+  //   in: "#22c55e",
+  //   out: "#ef4444",
+  // },
+  // light: {
+  //   text: "#11181C",
+  //   background: "#fff",
+  //   tint: tintColorLight,
+  //   icon: "#687076",
+  //   tabIconDefault: "#687076",
+  //   tabIconSelected: tintColorLight,
+  // },
+  // dark: {
+  //   text: "#ECEDEE",
+  //   background: "#151718",
+  //   tint: tintColorDark,
+  //   icon: "#9BA1A6",
+  //   tabIconDefault: "#9BA1A6",
+  //   tabIconSelected: tintColorDark,
+  // },
   primary: {
     brand: {
       light: "#0000e6",
@@ -46,12 +38,16 @@ export const Colors = {
     light: "#ffffff",
     dark: "#2D2D2D",
   },
+  card: {
+    light: "#121212",
+    dark: "#1e1e1e",
+  },
   text: {
     light: "#1a1a1a",
     dark: "#ffffff",
   },
   utility: {
-    success: "#28a745",
-    danger: "#dc3545",
+    green: "#28a745",
+    red: "#dc3545",
   },
 };
